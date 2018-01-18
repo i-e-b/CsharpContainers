@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>GeneralContainers</id>
+    <version>1.0.0</version>
+    <title>General Containers for C#</title>
+    <authors>IainBallard</authors>
+    <owners></owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://raw.githubusercontent.com/i-e-b/CsharpContainers/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/i-e-b/CsharpContainers</projectUrl>
+    <description>My package description.</description>
+    <summary>Some containers and base classes for general C# development</summary>
+    <tags>containers results validation ordering</tags>
+  </metadata>
+  <files>
+    <file src="lib\net46\Containers.dll" target="lib\net46\Containers.dll" />
+  </files>
+</package>
