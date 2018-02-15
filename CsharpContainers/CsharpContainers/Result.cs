@@ -2,7 +2,6 @@
 
 namespace Containers
 {
-
     /// <summary>
     /// A container for the results of computation that may fail. The type specified is the successful result value.
     /// </summary>
