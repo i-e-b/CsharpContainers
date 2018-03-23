@@ -1,5 +1,6 @@
 ﻿using System;
 using Containers;
+using Containers.Types;
 using NUnit.Framework;
 
 namespace CsharpContainers.Tests
@@ -98,5 +99,17 @@ namespace CsharpContainers.Tests
             Assert.AreEqual(expected, propagated_2.FailureCause);
         }
 
+        [Test]
+        public void can_have_a_result_of_nothing () {
+            var success1 = Result<Nothing>.Success(Nothing.Instance);
+            var success2 = Result<Nothing>.Success(null);
+            var failure = Result<Nothing>.Failure("A failure");
+
+            Assert.That(success1.IsSuccess, Is.True);
+            Assert.That(success1.ResultData, Is.EqualTo(Nothing.Instance));
+
+            Assert.That(success2.IsSuccess, Is.True);
+            Assert.That(failure.IsFailure, Is.True);
+        }
     }
 }

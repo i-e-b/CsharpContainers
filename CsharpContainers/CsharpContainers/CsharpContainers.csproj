@@ -37,9 +37,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DisposingContainer.cs" />
+    <Compile Include="Map.cs" />
     <Compile Include="PartiallyOrdered.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Result.cs" />
+    <Compile Include="Types\Nothing.cs" />
     <Compile Include="ValidationOutcome.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
