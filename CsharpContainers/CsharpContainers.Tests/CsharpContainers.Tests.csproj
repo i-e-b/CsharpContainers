@@ -47,13 +47,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CsharpContainers\CsharpContainers.csproj">
-      <Project>{37830DEB-A05C-4C12-BCC0-BEC85333B3B5}</Project>
-      <Name>CsharpContainers</Name>
-    </ProjectReference>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+    <ProjectReference Include="..\ContainersStandard\Containers.csproj">
+      <Project>{97991593-56e3-46bf-ae79-8f5eb80da5c0}</Project>
+      <Name>Containers</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

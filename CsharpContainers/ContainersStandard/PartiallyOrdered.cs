@@ -15,8 +15,12 @@ namespace Containers
         /// </summary>
         /// <returns>A value that indicates the relative order of the objects being compared. The return value has these meanings: Value Meaning Less than zero This instance precedes <paramref name="obj" /> in the sort order. Zero This instance occurs in the same position in the sort order as <paramref name="obj" />. Greater than zero This instance follows <paramref name="obj" /> in the sort order. </returns>
         public abstract int CompareTo(object obj);
+
+        /// <inheritdoc />
         public abstract override int GetHashCode();
 
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public static int CompareTo(PartiallyOrdered x, object y) { return x.CompareTo(y); }
         public static bool operator  < (PartiallyOrdered x, PartiallyOrdered y) { return CompareTo(x, y)  < 0; }
         public static bool operator  > (PartiallyOrdered x, PartiallyOrdered y) { return CompareTo(x, y)  > 0; }
@@ -25,6 +29,9 @@ namespace Containers
         public static bool operator == (PartiallyOrdered x, PartiallyOrdered y) { return CompareTo(x, y) == 0; }
         public static bool operator != (PartiallyOrdered x, PartiallyOrdered y) { return CompareTo(x, y) != 0; }
         public bool Equals(PartiallyOrdered x)    { return CompareTo(this, x) == 0; }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             return (obj is PartiallyOrdered ordered) && (CompareTo(this, ordered) == 0);

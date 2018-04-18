@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 namespace Containers
 {
@@ -14,7 +13,7 @@ namespace Containers
     // ReSharper disable RedundantExtendsListEntry
     public class Map<TKey, TValue>: 
             IDictionary<TKey, TValue>, ICollection<KeyValuePair<TKey, TValue>>, IEnumerable<KeyValuePair<TKey, TValue>>,
-            IEnumerable, IDictionary, ICollection, IReadOnlyDictionary<TKey, TValue>, IReadOnlyCollection<KeyValuePair<TKey, TValue>>, ISerializable
+            IEnumerable, IDictionary, ICollection, IReadOnlyDictionary<TKey, TValue>, IReadOnlyCollection<KeyValuePair<TKey, TValue>>
     // ReSharper restore RedundantExtendsListEntry
     {
         private readonly Func<TKey, TValue> _generator;
@@ -313,14 +312,6 @@ namespace Containers
         {
             lock(dlock){
                 return _storage.TryGetValue(key, out value);
-            }
-        }
-
-        /// <inheritdoc />
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            lock(dlock){
-                _storage.GetObjectData(info, context);
             }
         }
     }

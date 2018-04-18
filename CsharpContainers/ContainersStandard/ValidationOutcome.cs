@@ -26,10 +26,16 @@ namespace Containers
         public T ValidationErrors { get; internal set; }
 
 
+        /// <summary>
+        /// Create a validation success result
+        /// </summary>
         public static ValidationOutcome<T> Pass() {
             return new ValidationOutcome<T> { IsValid = true };
         }
 
+        /// <summary>
+        /// Create a validation failure result
+        /// </summary>
         public static ValidationOutcome<T> Fail(T error) {
             return new ValidationOutcome<T> {
                 IsValid = false,
