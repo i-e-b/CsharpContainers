@@ -1,5 +1,7 @@
-﻿using Containers;
+﻿using System;
+using Containers;
 using NUnit.Framework;
+// ReSharper disable CollectionNeverUpdated.Local
 
 namespace CsharpContainers.Tests
 {
@@ -30,13 +32,20 @@ namespace CsharpContainers.Tests
         }
 
         [Test]
-        public void map_can_use_default_for_ref_type () {
-            var subject = new Map<int, string>();
+        public void map_can_use_default_for_value_type () {
+            var subject = new Map<int, double>();
 
-            subject[0] = "hello";
+            subject[0] = 3.0;
 
-            Assert.That(subject[0], Is.EqualTo("hello"));
-            Assert.That(subject[42], Is.Null);
+            Assert.That(subject[0], Is.EqualTo(3.0));
+            Assert.That(subject[42], Is.EqualTo(0.0));
+        }
+        
+        [Test]
+        public void map_will_not_use_default_for_ref_type () {
+            Assert.Throws<Exception>(()=>{
+                var _ = new Map<int, string>();
+            });
         }
 
         [Test]
@@ -51,7 +60,7 @@ namespace CsharpContainers.Tests
 
         [Test]
         public void map_can_generate_maps () {
-            var subject = new Map<int, Map<string, string>>(k=>new Map<string,string>());
+            var subject = new Map<int, Map<string, string>>(k=>new Map<string,string>(""));
 
             subject[4]["twenty"] = "usted";
 

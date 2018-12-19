@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using JetBrains.Annotations;
 
 namespace Containers
 {
     /// <summary>
     /// Map is a thread-safe dictionary that implicitly creates key-value pairs as required, 
     /// and returns default values when queried for non-present keys.
+    /// <para></para>
+    /// Null values should not be assigned to a Map, but they will be accepted.
+    /// Null keys will NOT be accepted.
     /// </summary>
     /// <typeparam name="TKey">Key type</typeparam>
     /// <typeparam name="TValue">Value type</typeparam>
@@ -16,9 +21,9 @@ namespace Containers
             IEnumerable, IDictionary, ICollection, IReadOnlyDictionary<TKey, TValue>, IReadOnlyCollection<KeyValuePair<TKey, TValue>>
     // ReSharper restore RedundantExtendsListEntry
     {
-        private readonly Func<TKey, TValue> _generator;
-        private readonly Dictionary<TKey, TValue> _storage;
-        private readonly object dlock = new object();
+        [NotNull] private readonly Func<TKey, TValue> _generator;
+        [NotNull] private readonly Dictionary<TKey, TValue> _storage;
+        [NotNull] private readonly object dlock = new object();
 
         /// <inheritdoc />
         public object SyncRoot { get; }
@@ -31,20 +36,35 @@ namespace Containers
         /// </summary>
         public Map()
         {
+            var type = typeof(TValue).GetTypeInfo();
+            if (type?.IsValueType != true) throw new Exception("A generator function must be given for Map to reference type");
+
             SyncRoot = new object();
             _storage = new Dictionary<TKey, TValue>();
             _generator = key => default(TValue);
+        }
+        
+        /// <summary>
+        /// Create a new empty map that returns a given default value when queried for non-present keys
+        /// </summary>
+        public Map(TValue defaultValue)
+        {
+            if (defaultValue == null) throw new ArgumentNullException(nameof(defaultValue));
+
+            SyncRoot = new object();
+            _storage = new Dictionary<TKey, TValue>();
+            _generator = key => defaultValue;
         }
 
         /// <summary>
         /// Create a new empty map that uses a generator function to create values when queried for non-present keys
         /// </summary>
-        /// <param name="generator">Function to generate missing values</param>
+        /// <param name="generator">Function to generate missing values. This should never give null values (exceptions will be thrown if it does)</param>
         public Map(Func<TKey, TValue> generator)
         {
+            _generator = generator ?? throw new ArgumentNullException(nameof(generator));
             SyncRoot = new object();
             _storage = new Dictionary<TKey, TValue>();
-            _generator = generator;
         }
 
         /// <inheritdoc />
@@ -82,9 +102,9 @@ namespace Containers
             }
         }
 
-        object IDictionary.this[object key]
+        [NotNull] object IDictionary.this[object key]
         {
-            get {
+            [NotNull] get {
                 if (key is TKey key1) {
                     return this[key1];
                 }
@@ -102,14 +122,19 @@ namespace Containers
         /// <summary>
         /// Get or set a value by key
         /// </summary>
-        public TValue this[TKey key]
+        [NotNull] public TValue this[TKey key]
         {
-            get
+            [NotNull] get
             {
                 lock (dlock)
                 {
-                    if (!_storage.ContainsKey(key)) _storage[key] = _generator(key);
-                    return _storage[key];
+                    if (!_storage.ContainsKey(key)) {
+                        var newVal = _generator(key);
+                        if (newVal == null) throw new Exception("Map 'generator' function returned a null value");
+                        _storage[key] = newVal;
+                    }
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    return _storage[key]; // we are technically not correct -- if an explicit null store is made, the result will be null.
                 }
             }
             set
@@ -124,7 +149,7 @@ namespace Containers
 
         TValue IReadOnlyDictionary<TKey, TValue>.this[TKey key]
         {
-            get
+            [CanBeNull]get
             {
                 lock (dlock)
                 {
@@ -135,7 +160,7 @@ namespace Containers
         }
 
         /// <inheritdoc />
-        IDictionaryEnumerator IDictionary.GetEnumerator()
+        [NotNull] IDictionaryEnumerator IDictionary.GetEnumerator()
         {
             Dictionary<TKey, TValue>.Enumerator gen;
             lock (dlock)
@@ -145,7 +170,7 @@ namespace Containers
             return gen;
         }
 
-        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
+        [NotNull] IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
         {
             IEnumerator<KeyValuePair<TKey, TValue>> gen;
             lock (dlock)
@@ -155,7 +180,7 @@ namespace Containers
             return gen;
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        [NotNull] IEnumerator IEnumerable.GetEnumerator()
         {
             IEnumerator<KeyValuePair<TKey, TValue>> gen;
             lock (dlock)
@@ -170,13 +195,14 @@ namespace Containers
         /// </summary>
         public void Add(KeyValuePair<TKey, TValue> item)
         {
+            // ReSharper disable once AssignNullToNotNullAttribute
             this[item.Key] = item.Value;
         }
         
         /// <summary>
         /// Add or update a value by key
         /// </summary>
-        public void Add(object key, object value)
+        public void Add([NotNull]object key, [NotNull]object value)
         {
             ((IDictionary)this)[key] = value;
         }
@@ -184,7 +210,7 @@ namespace Containers
         /// <summary>
         /// Add or update a value by key
         /// </summary>
-        public void Add(TKey key, TValue value)
+        public void Add([NotNull]TKey key, [NotNull]TValue value)
         {
             this[key] = value;
         }
@@ -192,6 +218,7 @@ namespace Containers
         /// <inheritdoc />
         public bool Contains(object key)
         {
+            if (key == null) return false;
             if (key is TKey key1) {
                 lock(dlock){
                     return _storage.ContainsKey(key1);

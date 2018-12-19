@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Containers
 {
@@ -9,10 +10,10 @@ namespace Containers
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class DisposingContainer<T> : IDisposable, ICollection<T>
-        where T : IDisposable{
-
-        private readonly List<T> _innerContainer;
-        private readonly object _lock;
+        where T : IDisposable
+    {
+        [NotNull] private readonly List<T> _innerContainer;
+        [NotNull] private readonly object _lock;
         private volatile bool _isDisposed;
 
         /// <summary>
@@ -53,8 +54,8 @@ namespace Containers
         /// <summary>
         /// Get an iterator for the contained objects
         /// </summary>
-        public IEnumerator<T> GetEnumerator() => _innerContainer.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        [NotNull] public IEnumerator<T> GetEnumerator() => _innerContainer.GetEnumerator();
+        [NotNull] IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <inheritdoc />
         public void Add(T item)

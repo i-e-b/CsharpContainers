@@ -5,9 +5,8 @@ namespace Containers
     /// <summary>
     /// A container for the results of a validation check. The type specified is the container of validation failure data
     /// </summary>
-    public class ValidationOutcome<T> {
-        internal ValidationOutcome() { }
-
+    public struct ValidationOutcome<T>
+    {
         /// <summary>
         /// True if validation passed. In that case ValidationErrors may be null or invalid.
         /// <para>False if validation failed, in which case ValidationErrors should be populated.</para>

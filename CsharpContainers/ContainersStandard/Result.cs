@@ -5,10 +5,8 @@ namespace Containers
     /// <summary>
     /// A container for the results of computation that may fail. The type specified is the successful result value.
     /// </summary>
-    public class Result<T>
+    public struct Result<T>
     {
-
-        internal Result() { } // use the static methods to create
 
         /// <summary>
         /// If true, the result contains a valid ResultData and a null FailureCause.
