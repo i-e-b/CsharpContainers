@@ -2,6 +2,7 @@
 using Containers;
 using Containers.Types;
 using NUnit.Framework;
+// ReSharper disable InconsistentNaming
 
 namespace CsharpContainers.Tests
 {
@@ -110,6 +111,43 @@ namespace CsharpContainers.Tests
 
             Assert.That(success2.IsSuccess, Is.True);
             Assert.That(failure.IsFailure, Is.True);
+        }
+
+        [Test]
+        public void short_cut_to_result_of_nothing_is_available()
+        {
+            var success1 = Result.Success();
+            var failure = Result.Failure("A failure");
+
+            Assert.That(success1.IsSuccess, Is.True);
+            Assert.That(success1.ResultData, Is.EqualTo(Nothing.Instance));
+
+            Assert.That(failure.IsFailure, Is.True);
+        }
+        
+        [Test]
+        public void a_null_safe_message_string_is_available()
+        {
+            var success = Result.Success();
+            var failure_1 = Result.Failure("A failure");
+            var failure_2 = Result.Failure<int>(new Exception());
+
+            Assert.That(success.FailureMessage, Is.Not.Null);
+            Assert.That(failure_1.FailureMessage, Is.Not.Null);
+            Assert.That(failure_2.FailureMessage, Is.Not.Null);
+        }
+
+        [Test]
+        public void can_tell_the_difference_between_a_true_exception_and_a_string_message()
+        {
+            var fail_1 = Result.Failure<int>("This is a string message");
+            var fail_2 = Result.Failure<int>(new Exception("This is a wrapped exception"));
+            
+            Assert.That(fail_1.IsExceptional, Is.False);
+            Assert.That(fail_2.IsExceptional, Is.True);
+            
+            Assert.That(fail_1.FailureCause.Message, Is.Not.Null);
+            Assert.That(fail_2.FailureCause.Message, Is.Not.Null);
         }
     }
 }
