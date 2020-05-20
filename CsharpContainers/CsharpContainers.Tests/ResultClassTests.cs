@@ -149,5 +149,14 @@ namespace CsharpContainers.Tests
             Assert.That(fail_1.FailureCause.Message, Is.Not.Null);
             Assert.That(fail_2.FailureCause.Message, Is.Not.Null);
         }
+        
+        [Test]
+        public void empty_failures_are_not_exceptional()
+        {
+            var fail = Result<int>.EmptyFailure();
+            
+            Assert.That(fail.IsExceptional, Is.False);
+            Assert.That(fail.FailureCause.Message, Is.Not.Null);
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace Containers
         /// If false, any failure was given as a string message
         /// <para>If true, the failure was given as an Exception object</para>
         /// </summary>
-        public bool IsExceptional => !(FailureCause is StringException);
+        public bool IsExceptional => !(FailureCause is StringException) && (FailureCause != Result.EmptyException);
 
         /// <summary>
         /// Cause of the result failure, encoded in an exception. This may hold either the original exception or a generic Exception type
