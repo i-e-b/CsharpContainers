@@ -38,8 +38,10 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgeDictionaryTests.cs" />
     <Compile Include="DequeueTests.cs" />
     <Compile Include="MapTests.cs" />
+    <Compile Include="MultiMapTests.cs" />
     <Compile Include="PartiallyOrderedTests.cs" />
     <Compile Include="PartialResultTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -44,3 +44,15 @@ public sealed class MustDisposeResourceAttribute : Attribute
     /// </summary>
     public bool Value { get; }
 }
+
+[AttributeUsage(AttributeTargets.Parameter)]
+public sealed class MaybeNullWhenAttribute : Attribute
+{
+    public MaybeNullWhenAttribute() { Value = true; }
+    public MaybeNullWhenAttribute(bool value) { Value = value; }
+    /// <summary>
+    /// When set to <c>false</c>, disposing of the resource is not obligatory.
+    /// The main use-case for explicit <c>[MustDisposeResource(false)]</c> annotation is to loosen inherited annotation.
+    /// </summary>
+    public bool Value { get; }
+}
