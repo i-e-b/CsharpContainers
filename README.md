@@ -2,7 +2,8 @@
 
 Some containers and base classes for general C# development
 
-## 
+## General Containers
+
 * `Result` is a container for passing the value of computations that might fail (such as calls to IO or external services).
 * `PartialResult` is a container for passing the value of computations that might fail for multiple reasons or return partially complete results.
 * `ValidationOutcome` is a container for passing the value of checks that might fail in an informative way.
@@ -11,7 +12,7 @@ Some containers and base classes for general C# development
 Both `Result` and `ValidationOutcome` can be treated as booleans or their contained types to keep code clean.
 
 ## Dictionaries
-* 
+
 * `Map` is a dictionary wrapper that can generate entries when requested. This helps when working with loosely structured data.
 * `MultiMap` is a multi-thread safe dictionary of key => List(value).
 * `AgeDictionary` is a thread-safe dictionary that has a maximum age for elements, mainly for caching.
