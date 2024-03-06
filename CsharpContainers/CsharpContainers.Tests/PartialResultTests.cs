@@ -6,14 +6,14 @@ using NUnit.Framework;
 
 // ReSharper disable InconsistentNaming
 
-namespace CsharpContainers.Tests
+namespace CsharpContainers.Tests;
+
+[TestFixture]
+public class PartialResultTests
 {
-    [TestFixture]
-    public class PartialResultTests
+    [Test]
+    public void can_create_a_success_result_and_read_it_back()
     {
-        [Test]
-        public void can_create_a_success_result_and_read_it_back()
-        {
             var result = PartialResult.Success(1);
 
             Assert.That(result.IsSuccess, Is.True, "Should have been success, but was not");
@@ -23,9 +23,9 @@ namespace CsharpContainers.Tests
             Assert.That(result.ResultData, Is.EqualTo(1), "Stored data was incorrect");
         }
 
-        [Test]
-        public void can_create_a_warning_result_with_data_and_more_than_one_error_cause()
-        {
+    [Test]
+    public void can_create_a_warning_result_with_data_and_more_than_one_error_cause()
+    {
             var result_1 = PartialResult
                 .WithData("data 1")
                 .Warning("string warning")
@@ -63,9 +63,9 @@ namespace CsharpContainers.Tests
             Assert.That(result_3.ResultData, Is.EqualTo("data 3"));
         }
 
-        [Test]
-        public void adding_an_error_and_a_warning_results_in_an_error()
-        {
+    [Test]
+    public void adding_an_error_and_a_warning_results_in_an_error()
+    {
             var result_1 =
                 PartialResult<int>
                     .Warning("warn")
@@ -91,9 +91,9 @@ namespace CsharpContainers.Tests
             Assert.That(string.Join(",", result_3.CauseMessages), Is.EqualTo("fail,warn"));
         }
 
-        [Test]
-        public void adding_success_and_failure_results_in_failure()
-        {
+    [Test]
+    public void adding_success_and_failure_results_in_failure()
+    {
             var result_1 = PartialResult<int>.Success(1).Failure("err");
             var result_2 = PartialResult.Success(2).Failure("fail");
             var result_3 = PartialResult<int>.Failure("fail").Success(1);
@@ -103,17 +103,17 @@ namespace CsharpContainers.Tests
             Assert.That(result_3.State, Is.EqualTo(PartialResultState.Failed));
         }
 
-        [Test]
-        public void success_of_nothing_has_a_shortcut()
-        {
+    [Test]
+    public void success_of_nothing_has_a_shortcut()
+    {
             var result = PartialResult.Success();
             Assert.That(result.State, Is.EqualTo(PartialResultState.Success));
             Assert.That(result.ResultData, Is.EqualTo(Nothing.Instance));
         }
         
-        [Test]
-        public void warning_of_nothing_has_a_shortcut()
-        {
+    [Test]
+    public void warning_of_nothing_has_a_shortcut()
+    {
             var result_1 = PartialResult.Warning("warn");
             var result_2 = PartialResult.Warning(new Exception("warn"));
             
@@ -127,9 +127,9 @@ namespace CsharpContainers.Tests
             Assert.That(result_2.ResultData, Is.EqualTo(Nothing.Instance));
         }
         
-        [Test]
-        public void failure_of_nothing_has_a_shortcut()
-        {
+    [Test]
+    public void failure_of_nothing_has_a_shortcut()
+    {
             var result_1 = PartialResult.Failure("err");
             var result_2 = PartialResult.Failure(new Exception("err"));
             
@@ -143,9 +143,9 @@ namespace CsharpContainers.Tests
             Assert.That(result_2.ResultData, Is.EqualTo(Nothing.Instance));
         }
         
-        [Test]
-        public void can_change_the_contained_type_of_a_failure_result_to_help_error_propagation ()
-        {
+    [Test]
+    public void can_change_the_contained_type_of_a_failure_result_to_help_error_propagation ()
+    {
             var expected = new Exception("hello");
             var original = PartialResult<int>.Failure(expected);
 
@@ -157,5 +157,4 @@ namespace CsharpContainers.Tests
             Assert.That(propagated_2.Causes.Single(), Is.EqualTo(expected));
         }
 
-    }
 }

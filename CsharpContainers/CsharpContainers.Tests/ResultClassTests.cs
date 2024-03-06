@@ -4,13 +4,13 @@ using Containers.Types;
 using NUnit.Framework;
 // ReSharper disable InconsistentNaming
 
-namespace CsharpContainers.Tests
-{
-    [TestFixture]
-    public class ResultClassTests {
-        [Test]
-        public void can_create_a_success_result_and_read_it_back ()
-        {
+namespace CsharpContainers.Tests;
+
+[TestFixture]
+public class ResultClassTests {
+    [Test]
+    public void can_create_a_success_result_and_read_it_back ()
+    {
             var data = "Hello, world";
 
             var result = Result.Success(data); // can use the `Result` rather than `Result<T>` class to infer result type.
@@ -20,9 +20,9 @@ namespace CsharpContainers.Tests
             Assert.AreEqual(data, result.ResultData);
         }
         
-        [Test]
-        public void can_create_a_failure_case_with_a_specific_exception ()
-        {
+    [Test]
+    public void can_create_a_failure_case_with_a_specific_exception ()
+    {
             var msg = "Example";
             var error = new NotFiniteNumberException(msg);
 
@@ -35,9 +35,9 @@ namespace CsharpContainers.Tests
             Assert.AreEqual(msg, result.FailureCause.Message);
         }
         
-        [Test]
-        public void can_create_a_failure_case_with_a_generic_exception_from_a_message_string ()
-        {
+    [Test]
+    public void can_create_a_failure_case_with_a_generic_exception_from_a_message_string ()
+    {
             var msg = "Example";
 
             var result = Result<string>.Failure(msg); // here we pass just the message, without creating an Exception first
@@ -47,9 +47,9 @@ namespace CsharpContainers.Tests
             Assert.AreEqual(msg, result.FailureCause.Message);
         }
 
-        [Test]
-        public void can_treat_a_result_as_boolean_to_read_success_status ()
-        {
+    [Test]
+    public void can_treat_a_result_as_boolean_to_read_success_status ()
+    {
             var good = Result.Success("ok");
             var bad = Result<int>.Failure("bad");
 
@@ -57,18 +57,18 @@ namespace CsharpContainers.Tests
             Assert.IsFalse(bad);
         }
 
-        [Test]
-        public void can_implicitly_cast_a_success_result_to_its_contained_type ()
-        {
+    [Test]
+    public void can_implicitly_cast_a_success_result_to_its_contained_type ()
+    {
             var result = Result.Success("value");
             string value = result;
 
             Assert.AreEqual("value", value);
         }
 
-        [Test]
-        public void trying_to_implicitly_cast_a_failure_result_throws_the_underlying_failure_exception ()
-        {
+    [Test]
+    public void trying_to_implicitly_cast_a_failure_result_throws_the_underlying_failure_exception ()
+    {
             var expected = new Exception("sample error");
             var result = Result<int>.Failure(expected);
 
@@ -86,9 +86,9 @@ namespace CsharpContainers.Tests
             Assert.Fail("Did not throw exception");
         }
 
-        [Test]
-        public void can_change_the_contained_type_of_a_failure_result_to_help_error_propagation ()
-        {
+    [Test]
+    public void can_change_the_contained_type_of_a_failure_result_to_help_error_propagation ()
+    {
             var expected = new Exception("hello");
             var original = Result<int>.Failure(expected);
 
@@ -100,8 +100,8 @@ namespace CsharpContainers.Tests
             Assert.AreEqual(expected, propagated_2.FailureCause);
         }
 
-        [Test]
-        public void can_have_a_result_of_nothing () {
+    [Test]
+    public void can_have_a_result_of_nothing () {
             var success1 = Result<Nothing>.Success(Nothing.Instance);
             var success2 = Result<Nothing>.Success(null);
             var failure = Result<Nothing>.Failure("A failure");
@@ -113,9 +113,9 @@ namespace CsharpContainers.Tests
             Assert.That(failure.IsFailure, Is.True);
         }
 
-        [Test]
-        public void short_cut_to_result_of_nothing_is_available()
-        {
+    [Test]
+    public void short_cut_to_result_of_nothing_is_available()
+    {
             var success1 = Result.Success();
             var failure = Result.Failure("A failure");
 
@@ -125,9 +125,9 @@ namespace CsharpContainers.Tests
             Assert.That(failure.IsFailure, Is.True);
         }
         
-        [Test]
-        public void a_null_safe_message_string_is_available()
-        {
+    [Test]
+    public void a_null_safe_message_string_is_available()
+    {
             var success = Result.Success();
             var failure_1 = Result.Failure("A failure");
             var failure_2 = Result.Failure<int>(new Exception());
@@ -137,9 +137,9 @@ namespace CsharpContainers.Tests
             Assert.That(failure_2.FailureMessage, Is.Not.Null);
         }
 
-        [Test]
-        public void can_tell_the_difference_between_a_true_exception_and_a_string_message()
-        {
+    [Test]
+    public void can_tell_the_difference_between_a_true_exception_and_a_string_message()
+    {
             var fail_1 = Result.Failure<int>("This is a string message");
             var fail_2 = Result.Failure<int>(new Exception("This is a wrapped exception"));
             
@@ -150,13 +150,12 @@ namespace CsharpContainers.Tests
             Assert.That(fail_2.FailureCause.Message, Is.Not.Null);
         }
         
-        [Test]
-        public void empty_failures_are_not_exceptional()
-        {
+    [Test]
+    public void empty_failures_are_not_exceptional()
+    {
             var fail = Result<int>.EmptyFailure();
             
             Assert.That(fail.IsExceptional, Is.False);
             Assert.That(fail.FailureCause.Message, Is.Not.Null);
         }
-    }
 }
