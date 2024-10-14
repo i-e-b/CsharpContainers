@@ -20,6 +20,7 @@ Both `Result` and `ValidationOutcome` can be treated as booleans or their contai
 ## Queues and Buffers
 
 * `Dequeue` is a generic, auto-sizing, double-ended queue, and attempts to be compatible with JavaScript array semantics.
+* `CircularBuffer` is a high performance fixed-size circular buffer, which discards old items when over capacity.
 * `BiPartiteQueue` is a fixed-size circular buffer that gives byte-array access, and keeps each item in a contiguous range.
 
 ## General Types
