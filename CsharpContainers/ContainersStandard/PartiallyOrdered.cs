@@ -35,21 +35,21 @@ public abstract class PartiallyOrdered : IComparable {
     /// <para></para>
     /// For reference types, <c>null</c> is considered equal to any other <c>null</c>, and less than any non-null value.
     /// </summary>
-    public static int CompareTo(PartiallyOrdered x, object? y) { if (ReferenceEquals(x, null!)) { return ReferenceEquals(y!, null!) ? 0 : -1; } return x.CompareTo(y); }
+    public static int CompareTo(PartiallyOrdered? x, object? y) { if (ReferenceEquals(x, null!)) { return ReferenceEquals(y!, null!) ? 0 : -1; } return x.CompareTo(y); }
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-    public static bool operator  < (PartiallyOrdered x, PartiallyOrdered y) { return CompareTo(x, y)  < 0; }
-    public static bool operator  > (PartiallyOrdered x, PartiallyOrdered y) { return CompareTo(x, y)  > 0; }
-    public static bool operator <= (PartiallyOrdered x, PartiallyOrdered y) { return CompareTo(x, y) <= 0; }
-    public static bool operator >= (PartiallyOrdered x, PartiallyOrdered y) { return CompareTo(x, y) >= 0; }
-    public static bool operator == (PartiallyOrdered x, PartiallyOrdered y) { return CompareTo(x, y) == 0; }
-    public static bool operator != (PartiallyOrdered x, PartiallyOrdered y) { return CompareTo(x, y) != 0; }
+    public static bool operator  < (PartiallyOrdered? x, PartiallyOrdered? y) { return CompareTo(x, y)  < 0; }
+    public static bool operator  > (PartiallyOrdered? x, PartiallyOrdered? y) { return CompareTo(x, y)  > 0; }
+    public static bool operator <= (PartiallyOrdered? x, PartiallyOrdered? y) { return CompareTo(x, y) <= 0; }
+    public static bool operator >= (PartiallyOrdered? x, PartiallyOrdered? y) { return CompareTo(x, y) >= 0; }
+    public static bool operator == (PartiallyOrdered? x, PartiallyOrdered? y) { return CompareTo(x, y) == 0; }
+    public static bool operator != (PartiallyOrdered? x, PartiallyOrdered? y) { return CompareTo(x, y) != 0; }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     
     /// <summary>
     /// Returns true if this instance is considered in equal-order to <paramref name="x" />.
     /// </summary>
-    public bool Equals(PartiallyOrdered x)    { return CompareTo(this, x) == 0; }
+    public bool Equals(PartiallyOrdered? x)    { return CompareTo(this, x) == 0; }
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
